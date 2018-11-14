@@ -54,7 +54,7 @@ module b10_to_BCD(in, out0, out1, out2, out3);
 		out1 = count[7:4];
 		out2 = count[11:8];
 		out3 = count[15:12];
-		end
+	end
 		
 		
 	endmodule 
