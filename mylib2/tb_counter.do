@@ -6,4 +6,4 @@ run 100ns
 force enable 0
 run 100ns
 force enable 1
-run 100ns
+run 1000ns
