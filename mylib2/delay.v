@@ -7,8 +7,9 @@ module delay (N, clk, trigger, time_out);
 	reg [14:1] count_down;
 	
 	output time_out;
-	reg time_out;
 	
+	reg time_out;
+	reg lights_off;
 	initial count_down = N;
 	
 	always @ (posedge clk) 
@@ -16,6 +17,7 @@ module delay (N, clk, trigger, time_out);
 			count_down = N;
 			time_out <= 1'b1;
 		end
+		
 		else begin
 			count_down <= count_down - 1'b1;
 			time_out <= 0;
