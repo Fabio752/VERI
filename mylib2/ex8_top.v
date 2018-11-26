@@ -20,9 +20,9 @@ module ex8_top (
 	wire tick_hs;
 	wire en_lfsr;
 	wire start_delay;
-	wire timeout;
-	wire reset;
-	wire t_out; //ex9
+	wire reset_count; //ex9
+	wire start_count; //ex9
+	wire [15:0] react_time;
 	wire [14:1] N; 
 	wire [3:0] BCD0;
 	wire [3:0] BCD1;
@@ -45,14 +45,13 @@ module ex8_top (
 	clk_tick			DIV_50K(CLOCK_50, 1'b1, clk1, tick_ms);
 	clk_tick			DIV_5K(tick_ms, 1'b1, clk2, tick_hs);
 	
-	fsm				FSM(tick_ms, tick_hs, ~KEY[3], time_out, en_lfsr, start_delay, LEDR, t_out, reset /*ex9*/);
+	fsm				FSM(tick_ms, tick_hs, ~KEY[3], time_out, en_lfsr, start_delay, LEDR, /*ex9*/ start_count, reset_count);
 	lfsr14 			LFSR(en_lfsr, N, tick_ms);
 	//bin2bcd_16		B2BCD({2'b00, N[14:1]}, BCD0, BCD1, BCD2, BCD3, BCD4); ex8
 	
 	delay 			DELAY(N, tick_ms, start_delay, time_out);
 	
-	
-	reaction_count REACT(t_out, tick_ms, ~KEY[3], reset, react_time); //ex9
+	reaction_count REACT(start_count, tick_ms, ~KEY[3], reset_count, react_time); //ex9
 	
 	bin2bcd_16 		TIME_BCD(react_time, BCD0, BCD1, BCD2, BCD3, BCD4); //ex9
 	

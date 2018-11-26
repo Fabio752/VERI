@@ -1,4 +1,4 @@
-module fsm(clk, tick , trigger, time_out, en_lfsr, start_delay, ledr, timeout, reset/*ex9*/);
+module fsm(clk, tick , trigger, time_out, en_lfsr, start_delay, ledr, start_count, reset_count/*ex9*/);
 
 input clk;
 input tick;
@@ -8,22 +8,22 @@ input time_out;
 output en_lfsr;
 output start_delay;
 output [9:0] ledr;
-output timeout; //ex9
-output reset; //ex9
+output reset_count; //ex9
+output start_count; //ex9
 
 reg en_lfsr;
 reg start_delay;
 reg [9:0]ledr;
 reg [1:0] state;
-reg timeout; //ex9
-reg reset; //ex9
+reg reset_count; //ex9
+reg start_count; //ex9
 
 initial en_lfsr = 1'b0;
 initial start_delay = 1'b0;
 initial ledr = 10'b0;
 initial state = 2'b0;
-initial timeout = 1'b0; //ex9
-initial reset = 1'b0; //ex9
+initial reset_count = 1'b0; //ex9
+initial start_count = 1'b0; //ex9
 
 parameter WAIT = 2'b00;
 parameter LIGHTS = 2'b01;
@@ -56,23 +56,29 @@ always @ (*)
 		WAIT: begin
 			en_lfsr <= 1'b0;
 			start_delay <= 1'b0;
-			timeout <= 1'b1; //ex9
+			start_count <= 1'b1; //ex9
+			reset_count <= 1'b0; //ex9
+
 		end	
 		LIGHTS: begin
 			en_lfsr <= 1'b1;
 			start_delay <= 1'b0;
-			timeout <= 1'b0; //ex9
+			start_count <= 1'b0; //ex9
+			reset_count <= 1'b0; //ex9
+
 		end	
 		DELAY: begin
 			en_lfsr <= 1'b0;
 			start_delay <= 1'b0;
-			reset <= 1; //ex9
+			start_count <= 1'b0; //ex9
+			reset_count <= 1'b1; //ex9
 
 		end	
 		RESET: begin
 			en_lfsr <= 1'b0;
 			start_delay <= 1'b1;
-			reset <= 0; //ex9
+			start_count <= 1'b0; //ex9
+			reset_count <= 1'b1; //ex9
 		end	
 		
 	endcase 
