@@ -1,5 +1,6 @@
 module ex6_top (
 	KEY,
+	CLOCK_50,
 	HEX0,
 	HEX1,
 	HEX2,
@@ -7,25 +8,35 @@ module ex6_top (
 	HEX4
 );
 
-
-	input	[1:0] KEY; //LOW ACTIVE!!
+	input	[3:0] KEY;
+	input CLOCK_50;
 
 	output	[6:0]HEX0;
 	output	[6:0]HEX1;
 	output	[6:0]HEX2;
 	output	[6:0]HEX3;
 	output	[6:0]HEX4;
-	
-	wire	[15:0] count;
+
 	wire 	[3:0]	BCD0;
 	wire	[3:0]	BCD1;
 	wire	[3:0]	BCD2;
 	wire	[3:0]	BCD3;
 	wire	[3:0]	BCD4;
+	wire enable;
+	wire tick;
 	
-	counter_16 		COUNT (CLOCK_50, ~KEY[0], count, KEY[1]);
+	wire	[15:0] count; 
 	
-	bin2bcd_16		BCD (count, BCD0, BCD1, BCD2, BCD3, BCD4);
+	parameter max = 16'd49999;
+	
+	clk_tick   TK(CLOCK_50, ~KEY[0], max, tick);
+
+	assign enable = (~KEY[0]) && tick;
+	
+	counter_16 		CTR(CLOCK_50, enable, count, ~KEY[1]);
+
+	
+	bin2bcd_16		VAL0(count, BCD0, BCD1, BCD2, BCD3, BCD4);
 	
 	hex_to_7seg 	SEG0 (HEX0, BCD0);
 	hex_to_7seg 	SEG1 (HEX1, BCD1);
