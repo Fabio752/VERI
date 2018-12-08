@@ -1,10 +1,3 @@
-//------------------------------
-// Module name: allpass processor
-// Function: Simply to pass input to output
-// Creator:  Peter Cheung & CO
-// Version:  1.1
-// Date:     24 Jan 2014
-//------------------------------
 
 module processor (sysclk, data_in, data_out);
 
