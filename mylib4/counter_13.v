@@ -15,11 +15,11 @@ module counter_13 (
 	
 	reg [BIT_SZ-1:0] count;
 	
-	initial count = 0;
+	initial count = 1'b0;
 	
 	always @ (negedge clock)
 		if (reset == 1'b1)
-			count <=0;
+			count <=1'b0;
 		
 		else if (enable == 1'b1)
 			count <= count + 1'b1;

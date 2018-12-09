@@ -28,6 +28,9 @@ module ex19_top (CLOCK_50, SW, HEX0, HEX1, HEX2,
 	wire [9:0] 	data_out;	// processed data to DAC
 	wire			data_valid;
 	wire			DAC_SCK, ADC_SCK;
+	wire [3:0]	BCD0, BCD1, BCD2, BCD3, BCD4;
+	wire [19:0] delay;
+	
 	
 	clktick_16  GEN_10K (CLOCK_50, 1'b1, 16'd4999, tick_10k);  	// generate 10KHz sampling clock ticks
 	spi2dac SPI_DAC (CLOCK_50, data_out, tick_10k, 		// send processed sample to DAC
@@ -45,11 +48,14 @@ module ex19_top (CLOCK_50, SW, HEX0, HEX1, HEX2,
 		.adc_sck (ADC_SCK),
 		.sdata_from_adc (ADC_SDO));		
 					
-	processor	ALLPASS (CLOCK_50, data_in, data_out, data_valid);	// do some processing on the data
+	processor	ALLPASS (CLOCK_50, data_in, data_out, data_valid, SW[8:0], delay[19:0]);	// do some processing on the data
 	
-	hex_to_7seg		SEG0 (HEX0, data_in[3:0]);			
-	hex_to_7seg		SEG1 (HEX1, data_in[7:4]);			
-	hex_to_7seg		SEG2 (HEX2, {2'b0,data_in[9:8]});			
+	bin2bcd_16 		B2BCD({6'b0,delay[19:10]},BCD0,BCD1,BCD2,BCD3,BCD4);	
+	hex_to_7seg		SEG0 (HEX0, BCD0);			
+	hex_to_7seg		SEG1 (HEX1, BCD1);			
+	hex_to_7seg		SEG2 (HEX2, BCD2);			
+	hex_to_7seg		SEG3 (HEX3, BCD3);			
+	hex_to_7seg		SEG4 (HEX4, BCD4);			
 		
 endmodule
 
