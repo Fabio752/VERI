@@ -26,8 +26,8 @@ module ex13_top(
 	
 	clk_tick   TK(CLOCK_50, 1'b1, max, load);
 
-	counter_10 C10(CLOCK_50, 1'b1, A[9:0], 1'b0);
-	ROM 			R(A[9:0], CLOCK_50, D[9:0]);		  
+	counter_10 C10(load, 1'b1, A[9:0], 1'b0);
+	ROM 			R(A[9:0], load, D[9:0]);		  
 
 	spi2dac 	  INTER(CLOCK_50, D[9:0], load, DAC_SDI, DAC_CS, DAC_SCK, DAC_LD);
 	
